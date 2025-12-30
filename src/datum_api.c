@@ -157,6 +157,10 @@ void datum_api_var_STRATUM_TOTAL_SUBSCRIPTIONS(char *buffer, size_t buffer_size,
 void datum_api_var_STRATUM_HASHRATE_ESTIMATE(char *buffer, size_t buffer_size, const T_DATUM_API_DASH_VARS *vardata) {
 	snprintf(buffer, buffer_size, "%.2f Th/sec", vardata->STRATUM_HASHRATE_ESTIMATE);
 }
+void datum_api_var_BEST_SHARE_DIFF(char *buffer, size_t buffer_size, const T_DATUM_API_DASH_VARS *vardata) {
+    long double best_diff = get_global_best_share_diff();
+    snprintf(buffer, buffer_size, "%.0Lf", best_diff); 
+}
 void datum_api_var_DATUM_PROCESS_UPTIME(char *buffer, size_t buffer_size, const T_DATUM_API_DASH_VARS *vardata) {
 	uint64_t uptime_seconds = get_process_uptime_seconds();
 	uint64_t days = uptime_seconds / (24 * 3600);
@@ -256,6 +260,8 @@ DATUM_API_VarEntry var_entries[] = {
 	{"STRATUM_JOB_WEIGHT", datum_api_var_STRATUM_JOB_WEIGHT},
 	{"STRATUM_JOB_SIGOPS", datum_api_var_STRATUM_JOB_SIGOPS},
 	{"STRATUM_JOB_TXNCOUNT", datum_api_var_STRATUM_JOB_TXNCOUNT},
+
+	{"BEST_SHARE_DIFF", datum_api_var_BEST_SHARE_DIFF},
 	
 	{NULL, NULL} // Mark the end of the array
 };
