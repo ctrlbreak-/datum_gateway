@@ -82,6 +82,14 @@ bool need_coinbaser_rwlocks_init_done = false;
 long double global_best_share_diff = 0.0L;
 pthread_mutex_t best_share_diff_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+long double get_global_best_share_diff(void) {
+    long double diff;
+    pthread_mutex_lock(&best_share_diff_mutex);
+    diff = global_best_share_diff;
+    pthread_mutex_unlock(&best_share_diff_mutex);
+    return diff;
+}
+
 void stratum_latest_empty_increment_complete(uint64_t index, int clients_notified) {
 	pthread_rwlock_wrlock(&stratum_global_latest_empty_stat);
 	if ((stratum_latest_empty_job_index == index) && (!stratum_latest_empty_ready_for_full)) {

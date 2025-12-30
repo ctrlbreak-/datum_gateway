@@ -294,4 +294,7 @@ extern bool need_coinbaser_rwlocks_init_done;
 extern long double global_best_share_diff;
 extern pthread_mutex_t best_share_diff_mutex;
 
+// Getter for safe access to best share diff
+long double get_global_best_share_diff(void);
+
 #endif
