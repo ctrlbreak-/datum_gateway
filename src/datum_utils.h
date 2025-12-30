@@ -88,7 +88,7 @@ char **datum_deepcopy_charpp(const char * const *p);
 void datum_reexec();
 bool datum_secure_strequals(const char *secret, const size_t secret_len, const char *guess);
 const char *dynamic_hash_unit(double *inout_hashrate);
-
+long double get_true_diff_from_hash(const unsigned char *share_hash);
 
 static inline size_t datum_align_sz(const size_t min_sz, const size_t alignment) {
 	return (min_sz + alignment - 1) / alignment * alignment;

@@ -290,4 +290,8 @@ extern T_DATUM_SOCKET_APP *global_stratum_app;
 extern pthread_rwlock_t need_coinbaser_rwlocks[MAX_STRATUM_JOBS];
 extern bool need_coinbaser_rwlocks_init_done;
 
+// Best share tracking
+extern long double global_best_share_diff;
+extern pthread_mutex_t best_share_diff_mutex;
+
 #endif

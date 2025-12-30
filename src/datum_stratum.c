@@ -79,6 +79,9 @@ uint64_t stratum_latest_empty_sent_count = 0;
 pthread_rwlock_t need_coinbaser_rwlocks[MAX_STRATUM_JOBS];
 bool need_coinbaser_rwlocks_init_done = false;
 
+long double global_best_share_diff = 0.0L;
+pthread_mutex_t best_share_diff_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void stratum_latest_empty_increment_complete(uint64_t index, int clients_notified) {
 	pthread_rwlock_wrlock(&stratum_global_latest_empty_stat);
 	if ((stratum_latest_empty_job_index == index) && (!stratum_latest_empty_ready_for_full)) {
@@ -1333,6 +1336,15 @@ int client_mining_submit(T_DATUM_CLIENT_DATA *c, uint64_t id, json_t *params_obj
 			// submit via DATUM
 			datum_protocol_pow_submit(c, job, username_s, was_block, empty_work, quickdiff, block_header, job_diff, full_cb_txn, cb, extranonce_bin, coinbase_index);
 		}
+		
+		long double this_share_diff = get_true_diff_from_hash(share_hash);
+
+		pthread_mutex_lock(&best_share_diff_mutex);
+		if (this_share_diff > global_best_share_diff) {
+			global_best_share_diff = this_share_diff;
+			DLOG_INFO("New best share true diff: %.0Lf from %s", this_share_diff, username_s);
+		}
+		pthread_mutex_unlock(&best_share_diff_mutex);
 	}
 	
 	char s[256];
