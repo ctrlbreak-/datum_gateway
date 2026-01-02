@@ -1378,9 +1378,18 @@ int client_mining_submit(T_DATUM_CLIENT_DATA *c, uint64_t id, json_t *params_obj
 		pthread_mutex_lock(&best_share_diff_mutex);
 		if (this_share_diff > global_best_share_diff) {
 			global_best_share_diff = this_share_diff;
-			DLOG_INFO("New best share true diff: %.0Lf from %s", this_share_diff, username_s);
+						
+			// Add logging for share hash and diff
+			unsigned char rev_hash[32];
+			for (int i = 0; i < 32; i++) {
+				rev_hash[i] = share_hash[31 - i];
+			}
+			char share_hash_hex[65];
+			hash2hex(rev_hash, share_hash_hex);
+			DLOG_INFO("New best diff: %.0Lf with hash: %s from %s", this_share_diff, share_hash_hex, username_s);
 		}
 		pthread_mutex_unlock(&best_share_diff_mutex);
+		
 	}
 	
 	char s[256];

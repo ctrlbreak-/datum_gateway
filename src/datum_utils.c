@@ -855,7 +855,7 @@ const char *dynamic_hash_unit(double * const inout_hashrate){
 long double get_true_diff_from_hash(const unsigned char *share_hash) {
     long double hash_val = 0.0L;
     int i;
-    for (i = 0; i < 32; i++) {  // Interpret as big-endian: share_hash[0] is MSB
+    for (i = 31; i >= 0; i--) {
         hash_val = hash_val * 256.0L + (long double)share_hash[i];
     }
     long double diff1 = 65535.0L * powl(2.0L, 208.0L);
